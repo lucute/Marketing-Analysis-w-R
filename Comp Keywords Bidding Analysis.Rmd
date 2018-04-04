@@ -270,4 +270,42 @@ AIC(s3_1_4)
 
 ```
 
+#Segment5
+```{r}
 
+s5 <- fdf[fdf$segment == "Segment5",]
+s5_1_1 <- lm(salesgap_ahead ~ brand + region + factor(month_year) + cost_log + price + incentives_percent + comp_sales + ford_sales + ctr_cub + epc_log + qua_cub + tv_cub + digi_log + total_segment_sales, data = s5 )
+summary(s5_1_1)
+AIC(s5_1_1) #92309.49
+dwtest(s5_1_1)
+
+s5_1_2 <- lm(salesgap_ahead ~ brand + region + factor(month_year) + cost_log + price + incentives_percent + comp_sales + ford_sales + epc_log + qua_cub + tv_cub + digi_log + total_segment_sales, data = s5 )
+summary(s5_1_2)
+AIC(s5_1_2) #92307.53
+
+s5_1_3 <- lm(salesgap_ahead ~ brand + region + factor(month_year) + cost_log + price + incentives_percent + comp_sales + ford_sales + epc_log + tv_cub + digi_log + total_segment_sales, data = s5 )
+summary(s5_1_3)
+AIC(s5_1_3) #92306.13
+
+s5_1_4 <- lm(salesgap_ahead ~ brand + region + factor(month_year) + cost_log + price + incentives_percent + comp_sales + ford_sales + epc_log + digi_log + total_segment_sales, data = s5 )
+summary(s5_1_4)
+AIC(s5_1_4) #92305.36
+
+```
+
+```{r}
+s7 <- fdf[fdf$segment == "Segment7",]
+summary(s7)
+s7_1_1 <- lm(salesgap_ahead ~ region + factor(month_year) + cost_log + price + incentives_percent + comp_sales + ford_sales + ctr_cub + epc_log + qua_cub + tv_cub + digi_log + total_segment_sales, data = s7 )
+summary(s7_1_1)
+AIC(s7_1_1) #15035.94
+#At this segment, Ford didn't sell any car.
+
+s7_1_2 <- lm(salesgap_ahead ~ region + factor(month_year) + cost_log + price + incentives_percent + comp_sales + ctr_cub + epc_log + qua_cub + tv_cub + digi_log + total_segment_sales, data = s7 )
+summary(s7_1_2)
+AIC(s7_1_2) #15035.94
+
+vifcor(cbind(s7$incentives_percent, s7$price, s7$cost_log, s7$comp_sales))
+
+
+```
