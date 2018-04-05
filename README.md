@@ -11,5 +11,9 @@
 
 **Analysis Strategies:**<br>
 1. Based on the following reasons: first, both our and competitors' sales varies from different segments, regions, and time periods, second, the spend on this month may have greater effect on next month or next two month's sales, I use the gap between our and competitors' next month (next two month) sales as dependent variable.
-2. For the segment perspective, I separate the data into 14 different segments and try to find the "most fitted" model for each segment. From these different models, I can observe the impact of keyword bidding on the gap of sales. I assume the error terms for these models may correlate across each others so that seemingly unrelated regressions can be applied for this analysis. However, I don't have equal observations among the segments, the alternative plan is to run the ols first and random select equal observations for each segment, then use SUR to approach the models again. By comparing the coefficients of these two different regressions, there may be some interesting findings.
+2. For the segment perspective, I separate the data into 14 different segments and try to find the "most fitted" model for each segment. From these different models, I can observe the impact of keyword bidding on the gap of sales. I assume the error terms for these models may correlate across each others so that seemingly unrelated regressions can be applied for this analysis. However, I don't have equal observations among the segments, the alternative plan is to run the ols first and random select equal observations for each segment, then use SUR to approach the models again. By comparing the coefficients of these two different regressions, there may be some interesting findings.<br>
+*Updated*: After ran through the analysis for each segment, I found that for some segments, I don't have enough data (ex. no sales at all or only few cost greater than 0), therefore, I ignored these segments.<br>
+
 3. I do have equal amount of observations for each region, so I'll do the same approaches as segment part but using full data set instead.
+
+**Findings and Suggestions** 
