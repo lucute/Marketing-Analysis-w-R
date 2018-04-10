@@ -115,34 +115,39 @@ fdf$imp_cub <- sign(fdf$impressions) * abs(fdf$impressions)^(1/3)
 plotNormalHistogram(fdf$clicks)
 plotNormalHistogram(log(fdf$clicks+1))
 plotNormalHistogram(sign(fdf$clicks) * abs(fdf$clicks)^(1/3))
-
+#
 fdf$click_cub <- sign(fdf$clicks) * abs(fdf$clicks)^(1/3)
 
 plotNormalHistogram(fdf$click_thru_rate)
 plotNormalHistogram(log(fdf$click_thru_rate+1))
 plotNormalHistogram(sign(fdf$click_thru_rate) * abs(fdf$click_thru_rate)^(1/3))
+#
 fdf$ctr_cub <- sign(fdf$click_thru_rate) * abs(fdf$click_thru_rate)^(1/3)
 
 plotNormalHistogram(fdf$engagement)
 plotNormalHistogram(log(fdf$engagement+1))
 plotNormalHistogram(sign(fdf$engagement) * abs(fdf$engagement)^(1/3))
+#
 fdf$eng_cub <- sign(fdf$engagement) * abs(fdf$engagement)^(1/3)
 
 plotNormalHistogram(fdf$engagement_per_click)
 summary(fdf$engagement_per_click)
 plotNormalHistogram(log(fdf$engagement_per_click+1))
 plotNormalHistogram(sign(fdf$engagement_per_click) * abs(fdf$engagement_per_click)^(1/3))
+#
 fdf$epc_log <- log(fdf$engagement_per_click+1)
 
 plotNormalHistogram(fdf$cost_per_engagement)
 summary(fdf$cost_per_engagement)
 plotNormalHistogram(log(fdf$cost_per_engagement+1))
 plotNormalHistogram(sign(fdf$cost_per_engagement) * abs(fdf$cost_per_engagement)^(1/3))
+#
 fdf$cpe_log <- log(fdf$cost_per_engagement +1)
 
 plotNormalHistogram(fdf$cost_per_click)
 plotNormalHistogram(log(fdf$cost_per_click+1))
 plotNormalHistogram(sign(fdf$cost_per_click) * abs(fdf$cost_per_click)^(1/3))
+#
 fdf$cpc_log <- log(fdf$cost_per_click +1)
 
 
@@ -150,6 +155,7 @@ plotNormalHistogram(fdf$quality_score)
 summary(fdf$quality_score)
 plotNormalHistogram(log(fdf$quality_score+1))
 plotNormalHistogram(sign(fdf$quality_score) * abs(fdf$quality_score)^(1/3))
+#
 fdf$qua_cub <- sign(fdf$quality_score) * abs(fdf$quality_score)^(1/3)
 
 plotNormalHistogram(fdf$price)
@@ -163,16 +169,19 @@ plotNormalHistogram(sign(fdf$incentives_percent) * abs(fdf$incentives_percent)^(
 plotNormalHistogram(fdf$tv_spend)
 plotNormalHistogram(log(fdf$tv_spend+1))
 plotNormalHistogram(sign(fdf$tv_spend) * abs(fdf$tv_spend)^(1/3))
+#
 fdf$tv_cub <- sign(fdf$tv_spend) * abs(fdf$tv_spend)^(1/3)
 
 plotNormalHistogram(fdf$digital_spend)
 plotNormalHistogram(log(fdf$digital_spend+1))
 plotNormalHistogram(sign(fdf$digital_spend) * abs(fdf$digital_spend)^(1/3))
+#
 fdf$digi_log <- log(fdf$digital_spend+1)
 
 plotNormalHistogram(fdf$total_spend)
 plotNormalHistogram(log(fdf$total_spend+1))
 plotNormalHistogram(sign(fdf$total_spend) * abs(fdf$total_spend)^(1/3))
+#
 fdf$total_log <- log(fdf$total_spend+1)
 
 ```
@@ -904,10 +913,83 @@ summary(r32_1_1)
 ```
 
 SUR
+System list build up
+```{r}
+R1 <- r1$salesgap_ahead ~ r1$segment + factor(r1$month_year) + r1$cost_log + r1$price + r1$incentives_percent + r1$comp_sales + r1$ford_sales + r1$ctr_cub + r1$tv_cub + r1$total_segment_sales
+
+R2 <- r2$salesgap_ahead ~ r2$segment + factor(r2$month_year) + r2$cost_log + r2$price + r2$incentives_percent + r2$comp_sales + r2$ford_sales + r2$ctr_cub + r2$epc_log + r2$tv_cub + r2$total_segment_sales
+
+R3 <- r3$salesgap_ahead ~ r3$segment + factor(r3$month_year) + r3$cost_log + r3$price + r3$incentives_percent + r3$comp_sales + r3$ford_sales + r3$ctr_cub + r3$epc_log + r3$qua_cub + r3$tv_cub + r3$total_segment_sales
+
+R4 <- r4$salesgap_ahead ~ r4$segment + factor(r4$month_year) + r4$cost_log + r4$price + r4$incentives_percent + r4$comp_sales + r4$ford_sales + r4$ctr_cub + r4$epc_log + r4$qua_cub + r4$tv_cub + r4$digi_log + r4$total_segment_sales
+
+R5 <- r5$salesgap_ahead ~ r5$segment + factor(r5$month_year) + r5$cost_log + r5$price + r5$incentives_percent + r5$comp_sales + r5$ford_sales + r5$ctr_cub + r5$epc_log + r5$qua_cub + r5$tv_cub + r5$digi_log + r5$total_segment_sales
+
+R6 <- r6$salesgap_ahead ~ r6$segment + factor(r6$month_year) + r6$cost_log + r6$price + r6$incentives_percent + r6$comp_sales + r6$ford_sales + r6$ctr_cub + r6$epc_log + r6$qua_cub + r6$tv_cub + r6$digi_log + r6$total_segment_sales
+
+R7 <- r7$salesgap_ahead ~ r7$segment + factor(r7$month_year) + r7$cost_log + r7$price + r7$incentives_percent + r7$comp_sales + r7$ford_sales + r7$ctr_cub + r7$qua_cub + r7$tv_cub + r7$total_segment_sales
+
+R8 <- r8$salesgap_ahead ~ r8$segment + factor(r8$month_year) + r8$cost_log + r8$price + r8$incentives_percent + r8$comp_sales + r8$ford_sales + r8$ctr_cub + r8$epc_log + r8$tv_cub + r8$total_segment_sales
+
+R9 <- r9$salesgap_ahead ~ r9$segment + factor(r9$month_year) + r9$cost_log + r9$price + r9$incentives_percent + r9$comp_sales + r9$ford_sales + r9$ctr_cub + r9$epc_log + r9$qua_cub + r9$tv_cub + r9$digi_log + r9$total_segment_sales
+
+R10 <- r10$salesgap_ahead ~ r10$segment + factor(r10$month_year) + r10$cost_log + r10$price + r10$comp_sales + r10$ford_sales + r10$ctr_cub + r10$epc_log + r10$qua_cub + r10$tv_cub + r10$total_segment_sales
+
+R11 <- r11$salesgap_ahead ~ r11$segment + factor(r11$month_year) + r11$cost_log + r11$price + r11$incentives_percent + r11$comp_sales + r11$ford_sales + r11$ctr_cub + r11$epc_log + r11$tv_cub + r11$total_segment_sales
+
+R12 <- r12$salesgap_ahead ~ r12$segment + factor(r12$month_year) + r12$cost_log + r12$price + r12$incentives_percent + r12$comp_sales + r12$ford_sales + r12$ctr_cub + r12$epc_log + r12$qua_cub + r12$tv_cub + r12$total_segment_sales
+
+R13 <- r13$salesgap_ahead ~ r13$segment + factor(r13$month_year) + r13$cost_log + r13$price + r13$incentives_percent + r13$comp_sales + r13$ford_sales + r13$ctr_cub + r13$epc_log + r13$qua_cub + r13$tv_cub + r13$digi_log + r13$total_segment_sales
+
+R14 <- r14$salesgap_ahead ~ r14$segment + factor(r14$month_year) + r14$cost_log + r14$price + r14$incentives_percent + r14$comp_sales + r14$ford_sales + r14$ctr_cub + r14$epc_log + r14$tv_cub + r14$digi_log + r14$total_segment_sales
+
+R15 <- r15$salesgap_ahead ~ r15$segment + factor(r15$month_year) + r15$cost_log + r15$price + r15$incentives_percent + r15$comp_sales + r15$ford_sales + r15$ctr_cub + r15$epc_log + r15$tv_cub + r15$total_segment_sales
+
+R16 <- r16$salesgap_ahead ~ r16$segment + factor(r16$month_year) + r16$cost_log + r16$price + r16$incentives_percent + r16$comp_sales + r16$ford_sales + r16$epc_log + r16$qua_cub + r16$tv_cub + r16$total_segment_sales
+
+R17 <- r17$salesgap_ahead ~ r17$segment + factor(r17$month_year) + r17$cost_log + r17$price + r17$incentives_percent + r17$comp_sales + r17$ford_sales + r17$ctr_cub + r17$epc_log + r17$qua_cub + r17$tv_cub + r17$total_segment_sales
+
+R18 <- r18$salesgap_ahead ~ r18$segment + factor(r18$month_year) + r18$cost_log + r18$price + r18$incentives_percent + r18$comp_sales + r18$ford_sales + r18$ctr_cub + r18$epc_log + r18$qua_cub + r18$tv_cub + r18$digi_log + r18$total_segment_sales
+
+R19 <- r19$salesgap_ahead ~ r19$segment + factor(r19$month_year) + r19$cost_log + r19$price + r19$incentives_percent + r19$comp_sales + r19$ford_sales + r19$ctr_cub + r19$epc_log + r19$qua_cub + r19$tv_cub + r19$digi_log + r19$total_segment_sales
+
+R20 <- r20$salesgap_ahead ~ r20$segment + factor(r20$month_year) + r20$cost_log + r20$price + r20$incentives_percent + r20$comp_sales + r20$ford_sales + r20$ctr_cub + r20$epc_log + r20$qua_cub + r20$tv_cub + r20$total_segment_sales
+
+R21 <- r21$salesgap_ahead ~ r21$segment + factor(r21$month_year) + r21$cost_log + r21$price + r21$incentives_percent + r21$comp_sales + r21$ford_sales + r21$ctr_cub + r21$epc_log + r21$tv_cub + r21$total_segment_sales
+
+R22 <- r22$salesgap_ahead ~ r22$segment + factor(r22$month_year) + r22$cost_log + r22$incentives_percent + r22$comp_sales + r22$ford_sales + r22$epc_log + r22$qua_cub + r22$tv_cub + r22$total_segment_sales
+
+R23 <- r23$salesgap_ahead ~ r23$segment + factor(r23$month_year) + r23$cost_log + r23$price + r23$incentives_percent + r23$comp_sales + r23$ford_sales + r23$ctr_cub + r23$epc_log + r23$qua_cub + r23$tv_cub + r23$digi_log + r23$total_segment_sales
+
+R24 <- r24$salesgap_ahead ~ r24$segment + factor(r24$month_year) + r24$cost_log + r24$price + r24$incentives_percent + r24$comp_sales + r24$ford_sales + r24$ctr_cub + r24$epc_log + r24$qua_cub + r24$tv_cub + r24$total_segment_sales
+
+R25 <- r25$salesgap_ahead ~ r25$segment + factor(r25$month_year) + r25$cost_log + r25$price + r25$incentives_percent + r25$comp_sales + r25$ford_sales + r25$ctr_cub + r25$epc_log + r25$qua_cub + r25$tv_cub + r25$total_segment_sales
+
+R26 <- r26$salesgap_ahead ~ r26$segment + factor(r26$month_year) + r26$cost_log + r26$price + r26$incentives_percent + r26$comp_sales + r26$ford_sales + r26$ctr_cub + r26$epc_log + r26$qua_cub + r26$tv_cub + r26$digi_log + r26$total_segment_sales
+
+R27 <- r27$salesgap_ahead ~ r27$segment + factor(r27$month_year) + r27$cost_log + r27$price + r27$incentives_percent + r27$comp_sales + r27$ford_sales + r27$ctr_cub + r27$epc_log + r27$qua_cub + r27$tv_cub + r27$total_segment_sales
+
+R28 <- r28$salesgap_ahead ~ r28$segment + factor(r28$month_year) + r28$cost_log + r28$price + r28$incentives_percent + r28$comp_sales + r28$ford_sales + r28$ctr_cub + r28$epc_log + r28$qua_cub + r28$tv_cub + r28$digi_log + r28$total_segment_sales
+
+R29 <- r29$salesgap_ahead ~ r29$segment + factor(r29$month_year) + r29$cost_log + r29$price + r29$incentives_percent + r29$comp_sales + r29$ford_sales + r29$ctr_cub + r29$epc_log + r29$qua_cub + r29$tv_cub + r29$digi_log + r29$total_segment_sales
+
+R30 <- r30$salesgap_ahead ~ r30$segment + factor(r30$month_year) + r30$cost_log + r30$price + r30$incentives_percent + r30$comp_sales + r30$ford_sales + r30$ctr_cub + r30$epc_log + r30$qua_cub + r30$tv_cub + r30$digi_log + r30$total_segment_sales
+
+R31 <- r31$salesgap_ahead ~ r31$segment + factor(r31$month_year) + r31$cost_log + r31$price + r31$incentives_percent + r31$comp_sales + r31$ford_sales + r31$ctr_cub + r31$epc_log + r31$qua_cub + r31$tv_cub + r31$digi_log + r31$total_segment_sales
+
+R32 <- r32$salesgap_ahead ~ r32$segment + factor(r32$month_year) + r32$cost_log + r32$price + r32$incentives_percent + r32$comp_sales + r32$ford_sales + r32$ctr_cub + r32$epc_log + r32$qua_cub + r32$tv_cub + r32$digi_log + r32$total_segment_sales
+
+```
+
 ```{r}
 library(systemfit)
-system <- list(r1_1_2, r2_1_2)
-sur <- systemfit(formula = list(R1 = r1_1_2, R2 = r2_1_2), method =  "SUR")
+
+for (i in c(1:32)){
+  print(paste("r",i,"=","R",i, sep = ""))
+}
+
+system <- list(r1=R1,r2=R2,r3=R3,r4=R4,r5=R5,r6=R6,r7=R7,r8=R8,r9=R9,r10=R10,r11=R11,r12=R12,r13=R13,r14=R14,r15=R15,r16=R16,r17=R17,r18=R18,r19=R19,r20=R20,r21=R21,r22=R22,r23=R23,r24=R24,r25=R25,r26=R26,r27=R27,r28=R28,r29=R29,r30=R30,r31=R31,r32=R32)
+sur <- systemfit(system, method = "SUR")
 
 
 ```
