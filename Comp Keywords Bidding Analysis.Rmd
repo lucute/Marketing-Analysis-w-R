@@ -20,7 +20,7 @@ library(lmtest)
 library(usdm)
 library(sandwich)
 library(plyr)
-library(ggplot2)
+library(tidyverse)
 install.packages("reshape2")
 library(reshape2)
 library(calibrate)
@@ -39,7 +39,7 @@ fdf <- read.csv(file.choose())
 2. In which regions/segments, does bidding on competitive keywords have the greatest negative impact on the competition’s sales?
 3. For the regions/segments that bidding has a negative impact, which segments/regions should we focus?
 4. For a particular region/segments, against which competitor do we have the greatest opportunity to impact sales negatively? 
-5. Nationally, if sales for a particular one of Ford’s models are slumping, in which region do we see the greatest likelihood of successfully attacking our competitors?  Which competitor is the most vulnerable?  Which model (if not belonging to that competitor) is the most vulnerable? 
+
 
 ## Take a look of data:
 ```{r}
@@ -53,26 +53,104 @@ count(fdf$brand) #1-14 lowest:1920
 
 ## Analysis Strategy:
 1.Based on the following reasons: first, both our and competitors' sales varies from different segments, regions, and time periods, second, the spend on this month may have greater effect on next month or next two month's sales, I use the gap between our and competitors' next month (next two month) sales as dependent variable.
-2.For the segment perspective, I separate the data into 14 different segments and try to find the "most fitted" model for each segment. From these different models, I can observe the impact of keyword bidding on the gap of sales. I assume the error terms for these models may correlate across each others so that seemingly unrelated regressions can be applied for this analysis. However, I don't have equal observations among the segments, the alternative plan is to run the ols first and random select equal observations for each segment, then use SUR to approach the models again. By comparing the coefficients of these two different regressions, there may be some interesting findings.
+2.For the segment perspective, I separate the data into 14 different segments and try to find the "most fitted" model for each segment. From these different models, I can observe the impact of keyword bidding on the gap of sales. I assume the error terms for these models may correlate across each others so that seemingly unrelated regressions can be applied for this analysis. However, I don't have equal observations among the segments, I'll use linear regression models for each segments instead.
 3.I do have equal amount of observations for each region, so I'll do the same approaches as segment part but using full data set instead.
 
-#Plots of data (TBD)
+#Plots of data
 ```{r}
 sub <- as.data.table(cbind(my = fdf$month_year,total = fdf$total_segment_sales, ford = fdf$ford_sales, comp = fdf$comp_sales, segment = fdf$segment, year = fdf$year))
-sub$index <- paste(sub$segment,sub$my,sep = "_")
-sub1 <- sub[sub$year == 2012]
 
-sub1$my <- NULL
-sub1$segment <- NULL
-sub1$year <- NULL
-subm1 <- melt.data.table(sub1,measure.vars = c("ford","total","comp"))
+sub2 <- as.data.table(cbind(my = fdf$month_year,total = fdf$total_segment_sales, ford = fdf$ford_sales, comp = fdf$comp_sales))
+suba <- as.data.table(aggregate(sub2, by = list(factor(sub2$my)), FUN = sum))
+subm <- melt.data.table(suba,measure.vars = c("ford","total","comp"))
+ggplot(data = subm, aes(x = Group.1, y = value, group = variable)) + 
+  geom_line(aes(color = variable))
 
-ggplot(data = subm1, aes(x = index, y = value, group = variable)) + 
+#year by year
+#2016
+y2016 <- fdf[fdf["year"] == 2016,]
+
+sub2016 <- as.data.table(cbind(my = y2016$month_year, ford = y2016$ford_sales, comp = y2016$comp_sales))
+y2016a <- as.data.table(aggregate(sub2016, by = list(factor(sub2016$my)), FUN = sum))
+y2016a$my <- NULL
+subm2016 <- melt.data.table(y2016a,measure.vars = c("ford","comp"))
+
+ggplot(data = subm2016, aes(x = Group.1, y = value, group = variable)) + 
+  geom_line(aes(color = variable))
+
+#2015
+y2015 <- fdf[fdf["year"] == 2015,]
+
+sub2015 <- as.data.table(cbind(my = y2015$month_year, ford = y2015$ford_sales, comp = y2015$comp_sales))
+y2015a <- as.data.table(aggregate(sub2015, by = list(factor(sub2015$my)), FUN = sum))
+y2015a$my <- NULL
+subm2015 <- melt.data.table(y2015a,measure.vars = c("ford","comp"))
+
+ggplot(data = subm2015, aes(x = Group.1, y = value, group = variable)) + 
+  geom_line(aes(color = variable))
+
+
+#2014
+y2014 <- fdf[fdf["year"] == 2014,]
+
+sub2014 <- as.data.table(cbind(my = y2014$month_year, ford = y2014$ford_sales, comp = y2014$comp_sales))
+y2014a <- as.data.table(aggregate(sub2014, by = list(factor(sub2014$my)), FUN = sum))
+y2014a$my <- NULL
+subm2014 <- melt.data.table(y2014a,measure.vars = c("ford","comp"))
+
+ggplot(data = subm2014, aes(x = Group.1, y = value, group = variable)) + 
+  geom_line(aes(color = variable))
+
+#2013
+y2013 <- fdf[fdf["year"] == 2013,]
+
+sub2013 <- as.data.table(cbind(my = y2013$month_year, ford = y2013$ford_sales, comp = y2013$comp_sales))
+y2013a <- as.data.table(aggregate(sub2013, by = list(factor(sub2013$my)), FUN = sum))
+y2013a$my <- NULL
+subm2013 <- melt.data.table(y2013a,measure.vars = c("ford","comp"))
+
+ggplot(data = subm2013, aes(x = Group.1, y = value, group = variable)) + 
+  geom_line(aes(color = variable))
+
+#2012
+y2012 <- fdf[fdf["year"] == 2012,]
+
+sub2012 <- as.data.table(cbind(my = y2012$month_year, ford = y2012$ford_sales, comp = y2012$comp_sales))
+y2012a <- as.data.table(aggregate(sub2012, by = list(factor(sub2012$my)), FUN = sum))
+y2012a$my <- NULL
+subm2012 <- melt.data.table(y2012a,measure.vars = c("ford","comp"))
+
+ggplot(data = subm2012, aes(x = Group.1, y = value, group = variable)) + 
+  geom_line(aes(color = variable))
+
+#By Segment
+subseg <- as.data.table(cbind.data.frame(seg = fdf$segment, month = fdf$month_name, ford = fdf$ford_sales, comp = fdf$comp_sales, total = fdf$total_segment_sales))
+str(subseg)
+
+#s1
+seg1 <- subseg[subseg$seg == "Segment1",2:5]
+seg1a <- as.data.table(aggregate(cbind(ford = seg1$ford, comp = seg1$comp, total = seg1$total) ~ seg1$month, FUN = sum))
+seg1m <- melt.data.table(seg1a, measure.vars = c("ford", "comp", "total"))
+ggplot(data = seg1m, aes(x = `seg1$month` , y = value, group = variable)) + 
+  geom_line(aes(color = variable))
+
+#s2
+seg2 <- subseg[subseg$seg == "Segment2",2:5]
+seg2a <- as.data.table(aggregate(cbind(ford = seg2$ford, comp = seg2$comp, total = seg2$total) ~ seg2$month, FUN = sum))
+seg2m <- melt.data.table(seg2a, measure.vars = c("ford", "comp", "total"))
+ggplot(data = seg2m, aes(x = `seg2$month` , y = value, group = variable)) + 
+  geom_line(aes(color = variable))
+
+#s3
+seg3 <- subseg[subseg$seg == "Segment3",2:5]
+seg3a <- as.data.table(aggregate(cbind(ford = seg3$ford, comp = seg3$comp, total = seg3$total) ~ seg3$month, FUN = sum))
+seg3m <- melt.data.table(seg3a, measure.vars = c("ford", "comp", "total"))
+ggplot(data = seg3m, aes(x = `seg3$month` , y = value, group = variable)) + 
   geom_line(aes(color = variable))
 
 ```
 From the plot, I found that in general, our and comp's sales are moving together with total_segment_sales.
--> The ratio or gap between us, comps, and total sales can be dependent variable, too.
+The sales for us and comp's are vary from segment to segment.
 
 #Generate variables
 ```{r}
@@ -215,6 +293,7 @@ Analysis - Segment
 #Segment
 Segment1
 ```{r}
+library(boot)
 s1 <- fdf[fdf$segment == "Segment1",]
 
 s1_1_1 <- lm(salesgap_ahead ~ brand + region + factor(month_year) + cost_log + price + incentives_percent + comp_sales + ford_sales + ctr_cub + epc_log + qua_cub + tv_cub + digi_log + total_segment_sales, data = s1 )
@@ -229,6 +308,8 @@ AIC(s1_1_2) #75374.04
 s1_1_3 <- lm(salesgap_ahead ~ brand + region + factor(month_year) + cost_log + price + incentives_percent + salesgap + qua_cub + tv_cub + digi_log + total_segment_sales, data = s1 )
 summary(s1_1_3)
 AIC(s1_1_3) #75697.51
+
+plot(s1_1_2)
 
 #s1_1_2
 
@@ -254,7 +335,10 @@ s2_1_4 <- lm(salesgap_ahead ~ brand + region + factor(month_year) + cost_log + p
 summary(s2_1_4)
 AIC(s2_1_4) #220612.4
 
+plot(s2_1_2)
+
 #s2_1_2
+
 
 
 ```
@@ -286,6 +370,8 @@ AIC(s3_1_5) #231857.6
 s3_1_6 <- lm(salesgap_ahead ~ brand + region + factor(month_year) + cost_log + price + incentives_percent + comp_sales + ford_sales + ctr_cub + epc_log + digi_log*tv_cub + total_segment_sales, data = s3 )
 summary(s3_1_6)
 AIC(s3_1_6) #231859.9
+
+plot(s3_1_3)
 
 #s3_1_3
 
@@ -358,6 +444,8 @@ s8_1_4 <- lm(salesgap_ahead ~ region + brand + factor(month_year) + cost_log + i
 summary(s8_1_4)
 AIC(s8_1_4) #94361.73
 
+plot(s8_1_4)
+
 ```
 
 Segment9
@@ -417,6 +505,10 @@ s10_1_6 <- lm(salesgap_ahead ~ region + brand + factor(month_year) + cost_log + 
 summary(s10_1_6)
 AIC(s10_1_6) #141913.8
 
+plot(s10_1_6)
+
+ten <-as.data.frame(s10_1_6$coefficients[1:35])
+
 ```
 
 Segment11
@@ -435,6 +527,7 @@ AIC(s11_1_2) #83583.55
 s11_1_3 <- lm(salesgap_ahead ~ region + brand + factor(month_year) + cost_log + comp_sales + ford_sales + ctr_cub + epc_log + qua_cub + tv_cub + digi_log + total_segment_sales, data = s11 )
 summary(s11_1_3)
 AIC(s11_1_3) #83579.95
+plot(s11_1_3)
 
 ```
 
@@ -448,8 +541,10 @@ AIC(s12_1_1) #37892.06
 dwtest(s12_1_1) 
 
 s12_1_2 <- lm(salesgap_ahead ~ region + brand + factor(month_year) + cost_log + price + incentives_percent + comp_sales + ford_sales + ctr_cub + epc_log + qua_cub + total_segment_sales, data = s12 )
-summary(s12_1_1)
+summary(s12_1_2)
 AIC(s12_1_2) #37889.65
+
+plot(s12_1_2)
 
 ```
 
@@ -499,6 +594,8 @@ s15_1_4 <- lm(salesgap_ahead ~ region + brand + factor(month_year) + cost_log + 
 summary(s15_1_4)
 AIC(s15_1_4) #253089.5
 
+plot(s15_1_2)
+
 #s15_1_2
 
 ```
@@ -521,8 +618,6 @@ AIC(s16_1_2) #54034.02
 
 
 
-
-
 #Region
 Region1
 ```{r}
@@ -538,6 +633,8 @@ summary(r1_1_2)
 AIC(r1_1_2) #45057.91
 dwtest(r1_1_2)
 
+plot(r1_1_2)
+
 ```
 Region2
 ```{r}
@@ -552,6 +649,8 @@ summary(r2_1_2)
 AIC(r2_1_2) #45651.34
 dwtest(r2_1_2)
 
+plot(r2_1_2)
+
 ```
 
 Region3
@@ -565,6 +664,7 @@ dwtest(r3_1_1)
 r3_1_2 <- lm(r3$salesgap_ahead ~ r3$segment + factor(r3$month_year) + r3$cost_log + r3$price + r3$incentives_percent + r3$comp_sales + r3$ford_sales + r3$ctr_cub + r3$epc_log + r3$qua_cub + r3$tv_cub + r3$total_segment_sales)
 summary(r3_1_2)
 AIC(r3_1_2) #44424.04
+plot(r3_1_2)
 
 ```
 
@@ -731,6 +831,8 @@ r16_1_2 <- lm(r16$salesgap_ahead ~ r16$segment + factor(r16$month_year) + r16$co
 summary(r16_1_2)
 AIC(r16_1_2) #43360.43
 
+plot(r16_1_2)
+
 ```
 
 Region17
@@ -869,6 +971,8 @@ r27_1_2 <- lm(salesgap_ahead ~ segment + factor(month_year) + cost_log + price +
 summary(r27_1_2)
 AIC(r27_1_2) #38167.41
 
+plot(r27_1_2)
+
 ```
 
 Region28
@@ -990,7 +1094,9 @@ for (i in c(1:32)){
 
 system <- list(r1=R1,r2=R2,r3=R3,r4=R4,r5=R5,r6=R6,r7=R7,r8=R8,r9=R9,r10=R10,r11=R11,r12=R12,r13=R13,r14=R14,r15=R15,r16=R16,r17=R17,r18=R18,r19=R19,r20=R20,r21=R21,r22=R22,r23=R23,r24=R24,r25=R25,r26=R26,r27=R27,r28=R28,r29=R29,r30=R30,r31=R31,r32=R32)
 sur <- systemfit(system, method = "SUR")
+summary <- summary(sur)
 
+write.csv(summary, file = "outputsur.csv")
 
 ```
 
