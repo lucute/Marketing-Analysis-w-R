@@ -21,12 +21,10 @@ library(usdm)
 library(sandwich)
 library(plyr)
 library(tidyverse)
-install.packages("reshape2")
 library(reshape2)
 library(calibrate)
 library(car)
 library(cluster)
-install.packages("rcompanion")
 library(rcompanion)
 
 rm(list=ls())  
@@ -1096,9 +1094,105 @@ system <- list(r1=R1,r2=R2,r3=R3,r4=R4,r5=R5,r6=R6,r7=R7,r8=R8,r9=R9,r10=R10,r11
 sur <- systemfit(system, method = "SUR")
 summary <- summary(sur)
 
+print(summary)
+
+print(summary[1:100])
+closeAllConnections()
+
 write.csv(summary, file = "outputsur.csv")
 
 ```
 
+#Plot the Results
+```{r}
 
+#Segment 1
+intercepts <- c(34.293102,
+                34.293102 + 9.171409,
+                34.293102 + 20.845847)
+
+plotdata_S1 = s1[s1$region == c("Region1","Region10","Region22"),]
+yhat = s1_1_2$fitted[s1$region == c("Region1","Region10","Region22")]
+S1r <- data.frame(intercepts = intercepts,
+                       slopes = rep(1.101055,3), regions = c("Region1","Region10","Region22"))
+ggplot(data = plotdata_S1, aes(x = cost_log, y = salesgap_ahead)) +
+  geom_point(aes(group = region, colour = region)) +
+  geom_abline(data = S1r, aes(slope = slopes, intercept = intercepts, colour = regions),size = 1.5) +
+ theme(axis.title.y=element_text(size=rel(1.2),vjust=0.2),
+          axis.title.x=element_text(size=rel(1.2),vjust=0.2),
+          axis.text.x=element_text(size=rel(1.3)),
+          axis.text.y=element_text(size=rel(1.3)),
+          text = element_text(size=13)) +
+    scale_colour_brewer(palette="Set2") +
+  theme(legend.position = "top") +
+  scale_y_continuous(limits = c(0, 80))
+
+
+#Segment 10
+intercepts <- c(32.291495 + 236.454957,
+                32.291495 + 81.305445,
+                32.291495 + 35.483877)
+
+plotdata_S10 = s10[s10$region == c("Region22","Region29","Region25"),]
+yhat = s10_1_6$fitted[s1$region == c("Region22","Region29","Region25")]
+S10r <- data.frame(intercepts = intercepts,
+                       slopes = rep(1.274,3), regions = c("Region22","Region29","Region25"))
+ggplot(data = plotdata_S10, aes(x = cost_log, y = salesgap_ahead)) +
+  geom_point(aes(group = region, colour = region)) +
+  geom_abline(data = S10r, aes(slope = slopes, intercept = intercepts, colour = regions),size = 1.5) +
+ theme(axis.title.y=element_text(size=rel(1.2),vjust=0.2),
+          axis.title.x=element_text(size=rel(1.2),vjust=0.2),
+          axis.text.x=element_text(size=rel(1.3)),
+          axis.text.y=element_text(size=rel(1.3)),
+          text = element_text(size=13)) +
+    scale_colour_brewer(palette="Set2") +
+  theme(legend.position = "top") +
+  scale_y_continuous(limits = c(0, 500))
+
+
+#Region 6
+intercepts <- c(-6.59215 + 1.99086e+02,
+                -6.59215 + 9.85583e+01,
+                -6.59215 + 5.92713e+01)
+
+plotdata_r6 = r6[r6$segment == c("Segment8","Segment15","Segment3"),]
+yhat = r6_1_1$fitted[r6$segment == c("Segment8","Segment15","Segment3")]
+r6r <- data.frame(intercepts = intercepts,
+                       slopes = rep(2.34566,3), segments = c("Segment8","Segment15","Segment3"))
+ggplot(data = plotdata_r6, aes(x = cost_log, y = salesgap_ahead)) +
+  geom_point(aes(group = segment, colour = segment)) +
+  geom_abline(data = r6r, aes(slope = slopes, intercept = intercepts, colour = segments),size = 1.5) +
+ theme(axis.title.y=element_text(size=rel(1.2),vjust=0.2),
+          axis.title.x=element_text(size=rel(1.2),vjust=0.2),
+          axis.text.x=element_text(size=rel(1.3)),
+          axis.text.y=element_text(size=rel(1.3)),
+          text = element_text(size=13)) +
+    scale_colour_brewer(palette="Set2") +
+  theme(legend.position = "top") +
+  scale_y_continuous(limits = c(0, 300))
+
+
+#Region 7
+intercepts <- c(-1.62339e+01 + 7.29998e+02,
+                -1.62339e+01 + 8.40733e+01,
+                -1.62339e+01 + 6.55235e+01)
+
+plotdata_r7 = r7[r7$segment == c("Segment8","Segment10","Segment16"),]
+yhat = r7_1_2$fitted[r6$segment == c("Segment8","Segment10","Segment16")]
+r7r <- data.frame(intercepts = intercepts,
+                       slopes = rep(2.02101,3), segments = c("Segment8","Segment10","Segment16"))
+ggplot(data = plotdata_r6, aes(x = cost_log, y = salesgap_ahead)) +
+  geom_point(aes(group = segment, colour = segment)) +
+  geom_abline(data = r6r, aes(slope = slopes, intercept = intercepts, colour = segments),size = 1.5) +
+ theme(axis.title.y=element_text(size=rel(1.2),vjust=0.2),
+          axis.title.x=element_text(size=rel(1.2),vjust=0.2),
+          axis.text.x=element_text(size=rel(1.3)),
+          axis.text.y=element_text(size=rel(1.3)),
+          text = element_text(size=13)) +
+    scale_colour_brewer(palette="Set2") +
+  theme(legend.position = "top") +
+  scale_y_continuous(limits = c(0, 300))
+
+
+```
 
