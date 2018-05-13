@@ -15,4 +15,20 @@
 
 3. I do have equal amount of observations for each region, so I'll do the same approaches as segment part but using full data set instead.
 
+**Take a look of data:**<br>
+![alt text](https://github.com/lucute/Marketing-Analysis-w-R/blob/master/Sales%20over%20time.png) <br>
+![alt text](https://github.com/lucute/Marketing-Analysis-w-R/blob/master/Sales_over_time_by_month_eachyear.png) <br>
+![alt text](https://github.com/lucute/Marketing-Analysis-w-R/blob/master/Sales_over_time_firstsegments.png) <br>
+
+**Results:**<br>
+![alt text](https://github.com/lucute/Marketing-Analysis-w-R/blob/master/Segment_results.png) <br>
+![alt text](https://github.com/lucute/Marketing-Analysis-w-R/blob/master/Region_results1.png) <br>
+![alt text](https://github.com/lucute/Marketing-Analysis-w-R/blob/master/Region_results2.png) <br>
+
 **Findings and Suggestions** 
+![alt text](https://github.com/lucute/Marketing-Analysis-w-R/blob/master/Suggestions.png) <br>
+![alt text](https://github.com/lucute/Marketing-Analysis-w-R/blob/master/Segment1.png) <br>
+![alt text](https://github.com/lucute/Marketing-Analysis-w-R/blob/master/Segment2.png) <br>
+![alt text](https://github.com/lucute/Marketing-Analysis-w-R/blob/master/Region6.png) <br>
+![alt text](https://github.com/lucute/Marketing-Analysis-w-R/blob/master/Region7.png) 
+
